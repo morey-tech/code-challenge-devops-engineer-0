@@ -1,0 +1,10 @@
+{{ if .Values.configMapData }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kanban-app.fullname" . }}-config
+  labels:
+    {{- include "kanban-app.labels" . | nindent 4 }}
+data:
+  {{- toYaml .Values.configMapData | nindent 2 }}
+{{ end }}
