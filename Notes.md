@@ -122,3 +122,21 @@ kanban-app         | 2021-07-19 21:05:11.358  INFO 1 --- [           main] c.w.m
 
 Confirmed that I can access the web UI (`kanban-ui`) and create a new board (tests `kanban-app` and postgres). I did run into an issue with it on Firefox with the POST request failing with an `NS_BINDING_ABORTED` status under Transferred in the network tab. Works fine in Chrome though.
 
+Install postgres using the Bitnami chart into minikube (later this will be a dependcy in the Umbrella chart).
+```
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm install kanban-postgres bitnami/postgresql -f example_env/postgres/values.yml 
+$ helm list
+NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                   APP VERSION
+kanban-postgres default         1               2021-07-19 17:28:19.846363336 -0400 EDT deployed        postgresql-10.6.0       11.12.0   
+$ k get pods
+NAME                READY   STATUS    RESTARTS   AGE
+kanban-postgres-0   1/1     Running   0          24s
+$ k get svc
+NAME                       TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+kanban-postgres            ClusterIP   10.111.104.98   <none>        5432/TCP   28s
+kanban-postgres-headless   ClusterIP   None            <none>        5432/TCP   28s
+$ kubectl run kanban-postgres-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:12.7.0 --env="PGPASSWORD=kanban" --command -- psql --host kanban-postgres -U kanban -d kanban -p 5432
+kanban=>
+```
+
