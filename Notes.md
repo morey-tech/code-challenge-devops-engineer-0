@@ -6,8 +6,10 @@
 - [ ] Create example values in the `/example_env` folder.
 - [ ] Review options to improve security of the Kubernetes Deployments.
   - [ ] Dedicated service accounts for each workload?
+- [x] Depoy postgres with Helm to minikube
 ## Bonus Tasks
 - [ ] Create Umbrella chart for full application/repo.
+  - [ ] Add postgres as a depdency.
 - [ ] Include an example/option in the Helm charts to create Ingress resource to expose the deployment.
 - [ ] Add option to include existing secrets or secrets from Github Secrets with the Helm charts.
 - [ ] Upgrade the base container used for the `kanban-ui` Docker image.
