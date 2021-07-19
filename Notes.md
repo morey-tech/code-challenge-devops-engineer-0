@@ -7,6 +7,7 @@
 - [ ] Review options to improve security of the Kubernetes Deployments.
   - [ ] Dedicated service accounts for each workload?
 - [x] Depoy postgres with Helm to minikube
+- [x] Manually push docker images to dockerhub to allow chart testing.
 ## Bonus Tasks
 - [ ] Create Umbrella chart for full application/repo.
   - [ ] Add postgres as a depdency.
@@ -140,5 +141,23 @@ kanban-postgres            ClusterIP   10.111.104.98   <none>        5432/TCP   
 kanban-postgres-headless   ClusterIP   None            <none>        5432/TCP   28s
 $ kubectl run kanban-postgres-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:12.7.0 --env="PGPASSWORD=kanban" --command -- psql --host kanban-postgres -U kanban -d kanban -p 5432
 kanban=>
+```
+
+Create an account on dockerhub. Log into dockerhub:
+```
+$ docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: moreytech
+Password: 
+WARNING! Your password will be stored unencrypted in /home/tecno/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+```
+
+Add `image` field to containers in docker-compose and push to registy.
+```
+$ docker-compose push
 ```
 
