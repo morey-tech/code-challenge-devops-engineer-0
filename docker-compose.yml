@@ -14,10 +14,7 @@ services:
       - POSTGRES_PASSWORD=kanban
 
   kanban-app:
-<<<<<<< HEAD
     image: moreytech/kanban-board-k8s-demo:app-0.1.0
-=======
->>>>>>> bb0000299206cd123d4f76707e9b921b134bb58d
     build: ./kanban-app
     container_name: kanban-app
     environment:
@@ -31,10 +28,7 @@ services:
       - kanban-postgres
 
   kanban-ui:
-<<<<<<< HEAD
     image: moreytech/kanban-board-k8s-demo:ui-0.1.0
-=======
->>>>>>> bb0000299206cd123d4f76707e9b921b134bb58d
     build: ./kanban-ui
     container_name: kanban-ui
     ports:
