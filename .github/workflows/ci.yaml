@@ -9,6 +9,10 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - run: ls -l
+      
       - name: Compile variables
         shell: bash
         id: compile_variables
@@ -17,10 +21,6 @@ jobs:
           echo "::set-output name=KANBAN_UI_VER::$(cat kanban-ui/Chart.yaml | grep -oP 'appVersion: \"(\K.*)(?=\")')"
           echo "::set-output name=COMMIT_SHA_SHORT::$(echo ${GITHUB_SHA::8})"
 
-      - name: Checkout
-        uses: actions/checkout@v2
-      - run: ls -l
-      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
