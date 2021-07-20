@@ -5,7 +5,7 @@
 - [x] Create Helm chart for `kanban-ui`
 - [ ] Create example values in the `/example_env` folder.
 - [ ] Review options to improve security of the Kubernetes Deployments.
-  - [ ] Dedicated service accounts for each workload?
+  - [x] Dedicated service accounts for each workload?
 - [x] Depoy postgres with Helm to minikube
 - [x] Manually push docker images to dockerhub to allow chart testing.
 ## Bonus Tasks
