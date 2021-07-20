@@ -47,6 +47,17 @@ spec:
           #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+          {{- if .Values.configMapData }}
+          - configMapRef:
+              name: {{ include "kanban-app.fullname" . }}-config
+              optional: false
+          {{- end }}
+          {{- if or .Values.secretMapData .Values.secretMapB64Data }}
+          - secretRef:
+              name: {{ include "kanban-app.fullname" . }}-secrets
+              optional: false
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
