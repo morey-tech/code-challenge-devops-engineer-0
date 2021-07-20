@@ -199,3 +199,5 @@ Address 1: 10.100.179.210 kanban-app.default.svc.cluster.local
 
 All of the GET requests to the /api endpoints are working fine.
 
+Set up the CI workflow to use the `appVersion` from the app's chart for the image tag. Also including a tag with the short commit SHA for convince. In a more complete scenario I would implement automatic semantic versioning based on which step in the Gitflow branching method it is in.
+

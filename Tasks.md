@@ -1,6 +1,6 @@
 # Tasks:
-- [ ] Build Docker Images in Github Actions
-- [ ] Push Docker Images to Dockerhub in Github Actions
+- [x] Build Docker Images in Github Actions
+- [x] Push Docker Images to Dockerhub in Github Actions
 - [x] Create Helm chart for `kanban-app`
 - [x] Create Helm chart for `kanban-ui`
 - [ ] Create example values in the `/example_env` folder.
