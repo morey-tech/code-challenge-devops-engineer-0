@@ -1,8 +1,8 @@
 # Tasks:
 - [ ] Build Docker Images in Github Actions
 - [ ] Push Docker Images to Dockerhub in Github Actions
-- [ ] Create Helm chart for `kanban-app`
-- [ ] Create Helm chart for `kanban-ui`
+- [x] Create Helm chart for `kanban-app`
+- [x] Create Helm chart for `kanban-ui`
 - [ ] Create example values in the `/example_env` folder.
 - [ ] Review options to improve security of the Kubernetes Deployments.
   - [ ] Dedicated service accounts for each workload?
@@ -160,4 +160,66 @@ Add `image` field to containers in docker-compose and push to registy.
 ```
 $ docker-compose push
 ```
+
+Deployed both the app and ui via their helm charts. 
+```
+$ helm upgrade --install kanban-app kanban-app/
+$ helm upgrade --install kanban-ui kanban-ui/
+```
+
+Getting a 403 when hitting the API through the App over a nodeport:
+```
+$ k logs -f pod/kanban-ui-694646fc69-nhn47
+172.17.0.1 - - [20/Jul/2021:01:21:14 +0000] "POST /api/kanbans/ HTTP/1.1" 403 20 "http://192.168.49.2:30072/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36" "-"
+```
+
+Attempted to update three files that referenced `http://localhost:4200`
+- kanban-app/src/main/java/com/wkrzywiec/medium/kanban/controller/KanbanController.java
+- kanban-app/src/main/java/com/wkrzywiec/medium/kanban/controller/TaskController.java
+- kanban-ui/e2e/protractor.conf.js
+This didn't fix it for the minikube deployment. Tested redpeloying with `docker-compose` but now that is also showing 403 errors.
+```
+kanban-ui          | 172.19.0.1 - - [20/Jul/2021:12:16:26 +0000] "POST /api/kanbans/1/tasks/ HTTP/1.1" 403 20 "http://localhost:4200/kanbans/1" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36" "-"
+```
+
+Redeployed without the changes to the `http://localhost:4200` references and the post requests are creating the resource each time but sometimes failing with status code `499` (a.k.a canceled from client side, this is also indidcated in the chrome network log).
+```
+kanban-ui          | 172.19.0.1 - - [20/Jul/2021:12:24:36 +0000] "POST /api/kanbans/ HTTP/1.1" 201 51 "http://localhost:4200/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36" "-"
+
+kanban-ui          | 172.19.0.1 - - [20/Jul/2021:12:22:56 +0000] "POST /api/kanbans/ HTTP/1.1" 499 0 "http://localhost:4200/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36" "-"
+```
+
+Submitting the request directly with `curl` works without issues. So it seems like this is a browser-side issue.
+```
+## Though the APP (so Nginx)
+$ curl 'http://localhost:4200/api/kanbans/7/tasks/' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{"title":"seasta","description":null,"color":"#7afcff","status":"TODO"}'
+## Direct to API
+$ curl 'http://localhost:8080/api/kanbans/7/tasks/' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{"title":"seasta","description":null,"color":"#7afcff","status":"TODO"}'
+```
+
+Repployed into minikube with the helm charts and port forwarded the `kanban-ui` deployment. Still getting 403 from the browser but works over curl
+```
+$ export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=kanban-ui,app.kubernetes.io/instance=kanban-ui" -o jsonpath="{.items[0].metadata.name}")
+$ export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+$ kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+$ curl -X POST http://127.0.0.1:8080/api/kanbans/ --data-raw '{"title":"test"}' -H 'Content-Type: application/json'
+{"id":2,"title":"test","tasks":null}
+```
+
+Tested direct call to `http://kanban-app:8080/api/kanbans` from `kanban-ui` pod and it works fine. So it must be the UI blocking the request.
+```
+/ # nslookup kanban-app
+nslookup: can't resolve '(null)': Name does not resolve
+
+Name:      kanban-app
+Address 1: 10.100.179.210 kanban-app.default.svc.cluster.local
+/ # curl -X POST http://kanban-app:8080/api/kanbans/ --data-raw '{"title":"test-from-curl"}' -H 'Content-Type: application/json'
+{"id":4,"title":"test-from-curl","tasks":null}
+```
+
+All of the GET requests to the /api endpoints are working fine.
 
