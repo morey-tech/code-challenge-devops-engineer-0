@@ -206,3 +206,11 @@ Created an umbrella chart for the full application deployment `kanban/`.
 $ helm dependency update kanban/
 $ helm install kanban kanban/
 ```
+
+Download `dive` to inspect image for ways to reduce size.
+```
+$ wget https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb
+$ sudo apt install ./dive_0.9.2_linux_amd64.deb
+```
+
+Started at `151MB`

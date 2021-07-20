@@ -20,3 +20,4 @@
     ```
   - Latest `alpine` based `node` image is `node:16.5.0-alpine3.14`.
 - [ ] Optimize the size of the backend `kanban-app` Docker image.
+  - Attempted but couldn't find a solution. Already using a build image. Already using alpine openjdk image. No caches to clean up from what I could find. No slimmer images available for openjdk 8.
