@@ -8,7 +8,15 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-    steps:      
+    steps:
+      - name: Compile variables
+        shell: bash
+        id: compile_variables
+        run: |
+          echo "::set-output name=KANBAN_APP_VER::$(cat kanban-app/Chart.yaml | grep -oP 'appVersion: \"(\K.*)(?=\")')"
+          echo "::set-output name=KANBAN_UI_VER::$(cat kanban-ui/Chart.yaml | grep -oP 'appVersion: \"(\K.*)(?=\")')"
+          echo "::set-output name=COMMIT_SHA_SHORT::$(echo ${GITHUB_SHA::8})"
+
       - name: Checkout
         uses: actions/checkout@v2
       - run: ls -l
@@ -29,7 +37,7 @@ jobs:
         with:
           context: kanban-app/
           push: true
-          tags: moreytech/kanban-board-k8s-demo:app-latest,moreytech/kanban-board-k8s-demo:app-0.1.0
+          tags: moreytech/kanban-board-k8s-demo:app-latest,moreytech/kanban-board-k8s-demo:${{ steps.compile_variables.outputs.KANBAN_APP_VER }}
       - name: Image digest
         run: echo ${{ steps.app_docker_build.outputs.digest }}
       
@@ -39,6 +47,6 @@ jobs:
         with:
           context: kanban-ui/
           push: true
-          tags: moreytech/kanban-board-k8s-demo:ui-latest,moreytech/kanban-board-k8s-demo:ui-0.1.0
+          tags: moreytech/kanban-board-k8s-demo:ui-latest,moreytech/kanban-board-k8s-demo:${{ steps.compile_variables.outputs.KANBAN_UI_VER }}
       - name: Image digest
         run: echo ${{ steps.ui_docker_build.outputs.digest }}
