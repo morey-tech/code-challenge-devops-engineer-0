@@ -8,10 +8,11 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-    steps:
+    steps:      
       - name: Checkout
         uses: actions/checkout@v2
       - run: ls -l
+      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -21,6 +22,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
       - name: Build and push kanban-app
         id: app_docker_build
         uses: docker/build-push-action@v2
@@ -30,6 +32,7 @@ jobs:
           tags: moreytech/kanban-board-k8s-demo:app-latest,moreytech/kanban-board-k8s-demo:app-0.1.0
       - name: Image digest
         run: echo ${{ steps.app_docker_build.outputs.digest }}
+      
       - name: Build and push kanban-ui
         id: ui_docker_build
         uses: docker/build-push-action@v2
