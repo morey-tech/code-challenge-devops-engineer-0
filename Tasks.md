@@ -12,7 +12,7 @@
 - [x] Create Umbrella chart for full application/repo.
   - [x] Add postgres as a depdency.
 - [ ] Include an example/option in the Helm charts to create Ingress resource to expose the deployment.
-- [ ] Add option to include existing secrets or secrets from Github Secrets with the Helm charts.
+- [x] Add option to include existing secrets or secrets from Github Secrets with the Helm charts.
 - [x] Upgrade the base container used for the `kanban-ui` Docker image.
   - Output from build:
     ```

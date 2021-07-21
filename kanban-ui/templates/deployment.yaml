@@ -53,9 +53,19 @@ spec:
               name: {{ include "kanban-ui.fullname" . }}-config
               optional: false
           {{- end }}
+          {{- range $item := .Values.configMaps }}
+          - configMapRef:
+              name: {{ $item }}
+              optional: false
+          {{- end }}
           {{- if or .Values.secretMapData .Values.secretMapB64Data }}
           - secretRef:
               name: {{ include "kanban-ui.fullname" . }}-secrets
+              optional: false
+          {{- end }}
+          {{- range $item := .Values.secretMaps }}
+          - secretRef:
+              name: {{ $item }}
               optional: false
           {{- end }}
       {{- with .Values.nodeSelector }}
