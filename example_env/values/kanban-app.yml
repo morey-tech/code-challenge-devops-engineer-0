@@ -1,0 +1,6 @@
+configMapData:
+  DB_SERVER: kanban-postgres
+  POSTGRES_DB: kanban
+  POSTGRES_USER: kanban
+secretMapData:
+  POSTGRES_PASSWORD: kanban

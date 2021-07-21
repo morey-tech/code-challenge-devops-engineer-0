@@ -1,0 +1,5 @@
+postgresqlDatabase: kanban
+postgresqlPostgresPassword: kanban
+postgresqlUsername: kanban
+postgresqlPassword: kanban
+fullnameOverride: kanban-postgres  # Set name to the same as from docker-compose.

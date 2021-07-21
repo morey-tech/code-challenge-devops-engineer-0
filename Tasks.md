@@ -3,7 +3,7 @@
 - [x] Push Docker Images to Dockerhub in Github Actions
 - [x] Create Helm chart for `kanban-app`
 - [x] Create Helm chart for `kanban-ui`
-- [ ] Create example values in the `/example_env` folder.
+- [x] Create example values in the `/example_env` folder.
 - [ ] Review options to improve security of the Kubernetes Deployments.
   - [x] Dedicated service accounts for each workload?
 - [x] Depoy postgres with Helm to minikube
