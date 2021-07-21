@@ -14,13 +14,6 @@ Or use the deploy script that will update the chart dependcies, do a dry-run, th
 $ ./example_env/deploy-kanban.sh
 ```
 
-All of the required values are included in the defaults of the umbrella chart. Obviously this isn't ideal for secrets, so the chart supports include pre-existing secret maps by name (using the `secretMaps` list values) or including secret map data using `--set` flag which is useful for including values from Github Secrets in an Actions workflow. For example:
-```
-$ helm upgrade --install kanban kanban/ \
-  --set postgresql.postgresqlPassword="${{ secrets.POSTGRES_PASSWORD }}" \
-  --set app.secretMapData="${{ secrets.POSTGRES_PASSWORD }}"
-```
-
 ## Individual Helm Charts
 Each component of the complete appliction has it's own Helm chart to allow it to be deployed, scaled, maintained separately. To deploy the charts separately run the following from the project root:
 ```
@@ -36,4 +29,22 @@ kanban-postgres default         1               2021-07-21 11:37:24.452345836 -0
 kanban-ui       default         1               2021-07-21 11:37:50.228194086 -0400 EDT deployed        kanban-ui-0.1.4        ui-0.1.2 
 ```
 
+## Solution Notes
+
+### Ingress example
+The defaults include an example of exposing the `kanban-ui` using an Ingress resource. When using minikube run `minikube addons enable ingress` and add the ingress IP to to your hosts file (as shown below). Then access it at `http://kanban.example`.
+```
+$ echo "$(kubectl get ingress/kanban-ui --output jsonpath='{.status.loadBalancer.ingress[0].ip}') kanban.example" >> /etc/hosts
+```
+
+### Managed database
 The local postgres portion could be dropped and replaced by updating the `configMapData.DB_SERVER` value (and also the related credential values) in the `kanban-app` chart to point to a managed postgresql instance.
+
+
+### Keeping secrets safe
+All of the required values are included in the defaults of the umbrella chart. Obviously this isn't ideal for secrets, so the chart supports include pre-existing secret maps by name (using the `secretMaps` list values) or including secret map data using `--set` flag which is useful for including values from Github Secrets in an Actions workflow. For example:
+```
+$ helm upgrade --install kanban kanban/ \
+  --set postgresql.postgresqlPassword="${{ secrets.POSTGRES_PASSWORD }}" \
+  --set app.secretMapData="${{ secrets.POSTGRES_PASSWORD }}"
+```
