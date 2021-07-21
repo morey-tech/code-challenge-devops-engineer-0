@@ -8,6 +8,7 @@
   - [x] Dedicated service accounts for each workload?
 - [x] Depoy postgres with Helm to minikube
 - [x] Manually push docker images to dockerhub to allow chart testing.
+- [x] Outline issues found with application in `KNOWN-ISSUES.md`
 ## Bonus Tasks
 - [x] Create Umbrella chart for full application/repo.
   - [x] Add postgres as a depdency.
