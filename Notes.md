@@ -223,4 +223,4 @@ Room for improvement:
 - Improve notes printed on helm install.
 - Use health check probes on deployments
 - Make the `kanban-ui` reference to `kanban-app` in the Nginx config (`kanban-ui/default.conf`) dynamic based on the chart values.
-- Renaming the 
+- Add [network policies](https://kubernetes.io/blog/2016/04/kubernetes-network-policy-apis/) for deployments.
