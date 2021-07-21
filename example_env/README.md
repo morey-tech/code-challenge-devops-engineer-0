@@ -1,7 +1,7 @@
 # Kanban Examples
 
 ## Helm Umbrella Chart
-The whole application can be deployed with the Helm umbrella chart `kanban` which has the individual charts (`kanban-ui`, `kanban-ui`, `bitnami/postgresql`) as dependencies. For example, from the project root (and assuming your kubectl context is already set):
+The whole application can be deployed with the Helm umbrella chart `kanban` which has the individual charts (`kanban-ui`, `kanban-ui`, `bitnami/postgresql`) as dependencies (defined in `kanban/Chart.yaml`). For example, from the project root (and assuming your kubectl context is already set):
 ```
 $ helm upgrade --install kanban kanban/
 
@@ -35,3 +35,5 @@ kanban-app      default         1               2021-07-21 11:37:45.804129927 -0
 kanban-postgres default         1               2021-07-21 11:37:24.452345836 -0400 EDT deployed        postgresql-10.6.1      11.12.0    
 kanban-ui       default         1               2021-07-21 11:37:50.228194086 -0400 EDT deployed        kanban-ui-0.1.4        ui-0.1.2 
 ```
+
+The local postgres portion could be dropped and replaced by updating the `configMapData.DB_SERVER` value (and also the related credential values) in the `kanban-app` chart to point to a managed postgresql instance.
