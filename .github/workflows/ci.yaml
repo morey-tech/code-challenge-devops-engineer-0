@@ -36,6 +36,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: kanban-app/
+          pull: true  # Always attempt to pull a newer version of the image
           push: true
           tags: moreytech/kanban-board-k8s-demo:app-latest,moreytech/kanban-board-k8s-demo:${{ steps.compile_variables.outputs.KANBAN_APP_VER }},moreytech/kanban-board-k8s-demo:app-${{ steps.compile_variables.outputs.COMMIT_SHA_SHORT }}
       - name: Image digest
@@ -46,6 +47,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: kanban-ui/
+          pull: true  # Always attempt to pull a newer version of the image
           push: true
           tags: moreytech/kanban-board-k8s-demo:ui-latest,moreytech/kanban-board-k8s-demo:${{ steps.compile_variables.outputs.KANBAN_UI_VER }},moreytech/kanban-board-k8s-demo:ui-${{ steps.compile_variables.outputs.COMMIT_SHA_SHORT }}
       - name: Image digest
