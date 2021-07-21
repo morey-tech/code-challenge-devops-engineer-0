@@ -26,7 +26,7 @@ appVersion: "0.1.1"
 dependencies:
 - name: postgresql
   version: ~10.6.0
-  repository: "@bitnami"
+  repository: "https://charts.bitnami.com/bitnami"
 - name: kanban-app
   version: ^0.1.0
   repository: file://../kanban-app

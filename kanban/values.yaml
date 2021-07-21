@@ -8,7 +8,17 @@ app:
     POSTGRES_PASSWORD: kanban
 
 # Overrides for kanban-ui values
-ui: {}
+ui:
+  # When using minikube run `minikube addons enable ingress` 
+  # and add the ingress IP to to your hosts file
+  # echo "$(kubectl get ingress/kanban-ui --output jsonpath='{.status.loadBalancer.ingress[0].ip}') kanban.example" >> /etc/hosts
+  ingress:
+    enabled: true
+    hosts:
+    - host: kanban.example
+      paths:
+      - path: "/"
+        pathType: Prefix
 
 # Overrides for bitnami/postgresql values
 postgresql:
