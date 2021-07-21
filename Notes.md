@@ -215,3 +215,12 @@ $ sudo apt install ./dive_0.9.2_linux_amd64.deb
 
 Started at `151MB`. Attempted but couldn't find a solution. Already using a build image. Already using alpine openjdk image. No caches to clean up from what I could find. No slimmer images available for openjdk 8. I am guessing there are Java dependencies I could remove in the pom.xml, not sure which though. After testing with `mvn dependency:analyze` it suggested some dependencies that were no longer needed but based on the src it seems like liquid base is still needed and the swagger functionality is still "needed".
 
+Room for improvement:
+- Use chart global values to reduce redundant value definitions.
+- Use shared secret map for postgres and kanban-app.
+- Automate image tags using branch names/git tags.
+- Persistent storage for postgres.
+- Improve notes printed on helm install.
+- Use health check probes on deployments
+- Make the `kanban-ui` reference to `kanban-app` in the Nginx config (`kanban-ui/default.conf`) dynamic based on the chart values.
+- Renaming the 
