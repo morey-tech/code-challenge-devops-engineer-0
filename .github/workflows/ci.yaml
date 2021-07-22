@@ -17,8 +17,8 @@ jobs:
         shell: bash
         id: compile_variables
         run: |
-          echo "::set-output name=KANBAN_APP_VER::$(cat kanban-app/Chart.yaml | grep -oP 'appVersion: \"(\K.*)(?=\")')"
-          echo "::set-output name=KANBAN_UI_VER::$(cat kanban-ui/Chart.yaml | grep -oP 'appVersion: \"(\K.*)(?=\")')"
+          echo "::set-output name=KANBAN_APP_VER::$(cat charts/kanban-app/Chart.yaml | grep -oP 'appVersion: \"(\K.*)(?=\")')"
+          echo "::set-output name=KANBAN_UI_VER::$(cat charts/kanban-ui/Chart.yaml | grep -oP 'appVersion: \"(\K.*)(?=\")')"
           echo "::set-output name=COMMIT_SHA_SHORT::$(echo ${GITHUB_SHA::8})"
 
       - name: Set up QEMU
