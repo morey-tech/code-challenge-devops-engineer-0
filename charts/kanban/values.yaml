@@ -6,6 +6,7 @@ app:
     POSTGRES_USER: kanban
   secretMapData:
     POSTGRES_PASSWORD: kanban
+  replicaCount: 2
 
 # Overrides for kanban-ui values
 ui:
@@ -19,6 +20,7 @@ ui:
       paths:
       - path: "/"
         pathType: Prefix
+  replicaCount: 4
 
 # Overrides for bitnami/postgresql values
 postgresql:
